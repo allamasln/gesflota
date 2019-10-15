@@ -1,0 +1,27 @@
+const http = require('http');
+let app = require('../app');
+
+const { HOST, PORT } = process.env
+
+let server = http.createServer(app);
+
+server.on('error', error => {
+  if (error.syscall !== 'listen') { throw error }
+
+  switch (error.code) {
+    case 'EACCES':
+      console.error(`Port ${PORT} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`Port ${PORT} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`Listening on ${HOST}:${PORT}`);
+});

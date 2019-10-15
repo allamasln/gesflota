@@ -1,0 +1,4 @@
+module.exports = {
+  ROLE_VEHICLE_OWNER: 'VEHICULE_OWNER',
+  ROLE_MECHANIC: 'MECHANIC'
+}
