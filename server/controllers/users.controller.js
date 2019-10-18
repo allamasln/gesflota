@@ -56,7 +56,7 @@ module.exports.create = (req, res, next) => {
       user = new User (req.body);
       return user.save()
         .then(user => {
-          console.log(user)
+          res.status(200).json(user);
         }).catch(error => {
 
           function getValidationErrors(errors) {

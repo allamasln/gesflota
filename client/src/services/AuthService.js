@@ -9,10 +9,17 @@ class AuthService {
     });
   }
 
-  signup = (username, password) => {
+  signup = (username, password, nif, phone) => {
 
-    return this.service.post('users/create', {username, password})
-    .then(response => response.data)
+    return this.service.post('users/create', {username, password, nif, phone})
+    .then(response => {
+      
+
+    if(response.data) { this.login(username, password).then(response => response.data ); }
+    
+    return response.data
+    
+    })
   }
 
   login = (username, password) => {

@@ -7,8 +7,9 @@ import Login from "./components/auth/Login";
 import Navbar from "./components/navbar/Navbar";
 import AuthService from "./services/AuthService";
 
-import OwnerPanel from "./components/ownerPanel";
 
+import ToBuy from "./components/toBuy";
+import ToPost from "./components/toPost";
 
 
 class App extends Component {
@@ -16,7 +17,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedInUser: null
+      loggedInUser: null,
+      seccion: null,
     };
     this.service = new AuthService();
 
@@ -25,14 +27,15 @@ class App extends Component {
 
   getUser = userObj => {
     this.setState({
-      loggedInUser: userObj,
+      ...this.state,
+      loggedInUser: userObj
     });
   };
 
 
   logout = () => {
     this.service.logout().then(() => {
-      this.setState({ loggedInUser: false });
+      this.setState({ ...this.state, loggedInUser: false });
     });
   };
 
@@ -48,12 +51,14 @@ class App extends Component {
       .then(response => {
        
         this.setState({
+          ...this.state,
           loggedInUser: response,
         });
       })
       .catch(err => {
         
         this.setState({
+          ...this.state,
           loggedInUser: false,
         });
       });
@@ -117,7 +122,7 @@ isNotAuth(componentTrue, componentFalse) {
 
   render() {
 
-    console.log(this.state);
+
     return (
 
       <Fragment>
@@ -125,21 +130,26 @@ isNotAuth(componentTrue, componentFalse) {
            <Navbar 
                 isNotAuth={(componentTrue, componentFalse) => this.isNotAuth(componentTrue, componentFalse)}
                 isAuth={(rol,componentTrue, componentFalse) => this.isAuth(rol,componentTrue, componentFalse)}
-                logout={() => this.logout()} /> 
+                loggedInUser = {this.isAuth('all-roles',this.state.loggedInUser)}
+                logout={() => this.logout()} />
+                
           
 
             <Switch>
-              <Route exact path="/signup" render={() => this.isNotAuth(<Signup getUser={this.getUser} />, <Redirect to="/" />)} />
-              <Route exact path="/login" render={() => this.isNotAuth(<Login getUser={this.getUser} />, <Redirect to="/" />)} />
+              <Route exact path="/registrarse" render={() => this.isNotAuth(<Signup getUser={this.getUser} />, <Redirect to="/" />)} />
+              <Route exact path="/entrar" render={() => this.isNotAuth(<Login getUser={this.getUser} />, <Redirect to="/" />)} />
 
 
-              {/* <Route exact path="/" render={() => this.isAuth(false, <OwnerPanel />, <Redirect to="/" />)} /> */}
+              <Route exact path="/" render={() => <ToBuy />} />
               
+              
+            <Route exact path="/publicar" render={() => this.isAuth('all-roles', <ToPost loggedInUser={this.state.loggedInUser}/>, <Redirect to="/entrar" />)} />
+
              
-              <Route render={() => this.isNotAuth(<Redirect to="/login" />)} />
+              <Route render={() => this.isNotAuth(<Redirect to="/" />)} />
               <Route render={() => <Redirect to="/" />} />
             </Switch>
-            <Link to="/">Proptected</Link> 
+            
           
         </div>
       </Fragment>

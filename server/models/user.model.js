@@ -14,6 +14,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: 'Password requerida',
   },
+  nif: {
+    type: String,
+    required: 'Identificación del propietario requerida',
+  },
+  phone: {
+    type: String,
+    required: 'Teléfono requerido',
+  },
   role: {
     type: String,
     enum: [constants.ROLE_VEHICLE_OWNER, constants.MECHANIC],

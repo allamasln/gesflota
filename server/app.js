@@ -64,6 +64,8 @@ app.locals.title = 'Express - Generated with IronGenerator';
 app.use('/', require('./routes/index.routes'));
 
 app.use((err, req, res, next) => {
+  console.log(err);
+  console.log("TOMA");
   res.status(500).json({ message: err.message });
 }); 
 
